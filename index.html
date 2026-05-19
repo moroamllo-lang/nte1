@@ -63,12 +63,17 @@
 
     .bg-video {
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 56.25vw;
+      min-width: 177.78vh;
+      min-height: 100vh;
+      transform: translate(-50%, -50%);
+      border: 0;
       z-index: -4;
       filter: saturate(1.1) contrast(1.04);
+      pointer-events: none;
       background: #061016 url("assets/nte-rewards-hero.jpeg") center / cover no-repeat;
     }
 
@@ -525,10 +530,10 @@
       background: #000;
     }
 
-    .modal-video video {
+    .modal-video iframe {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      border: 0;
       display: block;
     }
 
@@ -609,7 +614,7 @@
 </head>
 <body>
   <main class="lander">
-    <video class="bg-video" src="assets/nte-gameplay.mp4" poster="assets/nte-rewards-hero.jpeg" autoplay muted loop playsinline preload="metadata"></video>
+    <iframe class="bg-video" src="https://player.vimeo.com/video/1193222308?background=1&amp;autoplay=1&amp;muted=1&amp;loop=1&amp;controls=0&amp;title=0&amp;byline=0&amp;portrait=0" title="Neverness to Everness gameplay background" allow="autoplay; fullscreen; picture-in-picture"></iframe>
 
     <header class="topbar" aria-label="Page header">
       <div class="topbar-inner">
@@ -665,7 +670,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z"/></svg>
       </button>
       <div class="modal-video">
-        <video id="modalVideo" src="assets/nte-gameplay.mp4" poster="assets/nte-rewards-hero.jpeg" controls playsinline preload="metadata"></video>
+        <iframe id="modalVideo" title="Neverness to Everness gameplay" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen data-vimeo-src="https://player.vimeo.com/video/1193222308?autoplay=1&amp;title=0&amp;byline=0&amp;portrait=0"></iframe>
       </div>
     </div>
   </div>
@@ -673,25 +678,19 @@
   <script>
     const modal = document.getElementById("videoModal");
     const modalVideo = document.getElementById("modalVideo");
-    const bgVideo = document.querySelector(".bg-video");
     const openers = document.querySelectorAll("[data-open-video]");
     const closer = document.querySelector("[data-close-video]");
-
-    bgVideo.play().catch(() => {});
 
     function openVideo() {
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
-      bgVideo.pause();
-      modalVideo.currentTime = 0;
-      modalVideo.play().catch(() => {});
+      modalVideo.src = modalVideo.dataset.vimeoSrc;
     }
 
     function closeVideo() {
       modal.classList.remove("is-open");
       modal.setAttribute("aria-hidden", "true");
-      modalVideo.pause();
-      bgVideo.play().catch(() => {});
+      modalVideo.src = "";
     }
 
     openers.forEach((opener) => opener.addEventListener("click", openVideo));
